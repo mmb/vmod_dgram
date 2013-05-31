@@ -6,8 +6,8 @@ vmod_dgram
 Varnish Dgram Module
 ----------------------
 
-:Author: Martin Blix Grydeland
-:Date: 2011-05-26
+:Author: Matthew M. Boedicker
+:Date: 2013-05-30
 :Version: 1.0
 :Manual section: 3
 
