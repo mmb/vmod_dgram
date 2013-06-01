@@ -13,7 +13,7 @@ init_function(struct vmod_priv *priv, const struct VCL_conf *conf) {
 }
 
 void
-vmod_dgram_send(struct sess *sp, const char *s, const char *host,
+vmod_send(struct sess *sp, const char *s, const char *host,
     int port) {
     int sockfd;
     struct sockaddr_in destaddr;

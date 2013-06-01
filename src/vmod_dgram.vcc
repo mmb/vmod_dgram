@@ -1,3 +1,2 @@
 Module dgram
-Init init_function
-Function VOID dgram_send(STRING, STRING, INT)
+Function VOID send(STRING, STRING, INT)
