@@ -28,5 +28,7 @@ vmod_send(struct sess *sp, const char *s, const char *host,
     sendto(sockfd, s, strlen(s), 0,
         (struct sockaddr *) &destaddr, sizeof(destaddr));
 
+    close(sockfd);
+
     return;
 }
