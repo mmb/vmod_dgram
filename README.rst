@@ -16,10 +16,17 @@ SYNOPSIS
 
 import dgram;
 
+sub vcl_deliver {
+  dgram.send(req.request + " " + req.http.host + req.url, "127.0.0.1", 12345);
+}
+
 DESCRIPTION
 ===========
 
-Varnish module to send UDP.
+Varnish module to send arbitrary data over UDP from VCL.
+
+The original use case is a hit counter that will send the URL served for
+every request to a simple UDP server for further processing.
 
 FUNCTIONS
 =========
@@ -64,14 +71,6 @@ Make targets:
 * make - builds the vmod
 * make install - installs your vmod in `VMODDIR`
 * make check - runs the unit tests in ``src/tests/*.vtc``
-
-In your VCL you could then use this vmod along the following lines::
-
-    import dgram;
-
-    sub vcl_deliver {
-        dgram.send(req.url, "127.0.0.1", 12345);
-    }
 
 HISTORY
 =======
