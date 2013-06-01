@@ -2,6 +2,7 @@
 #include <netinet/in.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <strings.h>
 #include <sys/socket.h>
 
 #include "vcc_if.h"
@@ -11,7 +12,9 @@ init_function(struct vmod_priv *priv, const struct VCL_conf *conf) {
     return 0;
 }
 
-void dgram_send(struct sess *sp, const char *s, const char *host, const int port) {
+void
+vmod_dgram_send(struct sess *sp, const char *s, const char *host,
+    int port) {
     int sockfd;
     struct sockaddr_in destaddr;
 
