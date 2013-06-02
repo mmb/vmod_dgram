@@ -1,15 +1,14 @@
 #include <arpa/inet.h>
 #include <netinet/in.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <strings.h>
 #include <sys/socket.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 #include "vcc_if.h"
 
 void
-vmod_send(struct sess *sp, const char *s, const char *host,
-    int port) {
+vmod_send(struct sess *sp, const char *s, const char *host, int port) {
     int sockfd;
     struct sockaddr_in destaddr;
 
