@@ -1,13 +1,16 @@
 Summary: UDP client VMOD for Varnish.
-Name: vmod-varnish-%{VARNISHVER}-dgram
-Version: 0.1
+Name: vmod-dgram
+Version: 0.2
 Release: 1%{?dist}
 License: BSD
 Group: System Environment/Daemons
 Source0: libvmod-dgram.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-Requires: varnish > 3.0
-BuildRequires: make, python-docutils
+Requires: varnish >= 4.0.2
+BuildRequires: make
+BuildRequires: python-docutils
+BuildRequires: varnish >= 4.0.2
+BuildRequires: varnish-libs-devel >= 4.0.2
 
 %description
 UDP client VMOD for Varnish
@@ -16,20 +19,16 @@ UDP client VMOD for Varnish
 %setup -n libvmod-dgram
 
 %build
-# this assumes that VARNISHSRC is defined on the rpmbuild command line, like this:
-# rpmbuild -bb --define 'VARNISHSRC /home/user/rpmbuild/BUILD/varnish-3.0.3' redhat/*spec
-./configure VARNISHSRC=%{VARNISHSRC} VMODDIR="$(PKG_CONFIG_PATH=%{VARNISHSRC} pkg-config --variable=vmoddir varnishapi)" --prefix=/usr/
-make
-make check
+%configure --prefix=/usr/
+%{__make} %{?_smp_mflags}
+%{__make} %{?_smp_mflags} check
 
 %install
-make install DESTDIR=%{buildroot}
-mkdir -p %{buildroot}/usr/share/doc/%{name}/
-cp README.rst %{buildroot}/usr/share/doc/%{name}/
-cp LICENSE %{buildroot}/usr/share/doc/%{name}/
+[ %{buildroot} != "/" ] && %{__rm} -rf %{buildroot}
+%{__make} install DESTDIR=%{buildroot}
 
 %clean
-rm -rf %{buildroot}
+[ %{buildroot} != "/" ] && %{__rm} -rf %{buildroot}
 
 %files
 %defattr(-,root,root,-)
@@ -38,5 +37,7 @@ rm -rf %{buildroot}
 %{_mandir}/man?/*
 
 %changelog
+* Web Aug 4 2015 Maksim Naumov - 0.2
+- Rebuild for Varnish 4.0
 * Thu May 30 2013 Matthew M. Boedicker <matthewm@boedicker.org> - 0.1-0.20130530
 - Initial version.

@@ -1,3 +1,8 @@
+#define _GNU_SOURCE
+
+#include "vrt.h"
+#include "vcc_if.h"
+
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <stdlib.h>
@@ -6,33 +11,45 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#include "vcc_if.h"
-#include "vrt.h"
-
 typedef struct cache {
   int sockfd;
 } cache_t;
 
-int
-init_function(struct vmod_priv *priv, const struct VCL_conf *conf) {
-  cache_t *cache;
 
-  cache = malloc(sizeof(cache_t));
-  cache->sockfd = -1;
+static void free_mc_vcl_cache(void *data)
+{
+    cache_t *cache = (cache_t*)data;
 
-  priv->priv = cache;
+    if (cache->sockfd != -1) {
+        close(cache->sockfd);
+    }
 
-  return 0;
+    free(cache);
 }
 
-void
-vmod_send(struct sess *sp,  struct vmod_priv *priv, const char *s,
-	  const char *host, int port) {
+int init_function(struct vmod_priv *priv, const struct VCL_conf *conf)
+{
+    cache_t *cache;
+
+    cache = calloc(1, sizeof(cache_t));
+
+    AN(cache)
+
+    cache->sockfd = -1;
+
+    priv->priv = cache;
+    priv->free = free_mc_vcl_cache;
+
+    return 0;
+}
+
+void vmod_send(struct sess *sp,  struct vmod_priv *priv, const char *s, const char *host, int port)
+{
     cache_t *cache = priv->priv;
     struct sockaddr_in destaddr;
 
     if (cache->sockfd == -1) {
-      cache->sockfd = socket(AF_INET, SOCK_DGRAM, 0);
+        cache->sockfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
     }
 
     bzero(&destaddr, sizeof(destaddr));
@@ -41,8 +58,7 @@ vmod_send(struct sess *sp,  struct vmod_priv *priv, const char *s,
     destaddr.sin_addr.s_addr = inet_addr(host);
     destaddr.sin_port = htons(port);
 
-    sendto(cache->sockfd, s, strlen(s), 0,
-        (struct sockaddr *) &destaddr, sizeof(destaddr));
+    sendto(cache->sockfd, s, strlen(s), 0, (struct sockaddr *) &destaddr, sizeof(destaddr));
 
     return;
 }
