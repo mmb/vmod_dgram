@@ -1,6 +1,7 @@
 #define _GNU_SOURCE
 
 #include "vrt.h"
+#include "cache/cache.h"
 #include "vcc_if.h"
 
 #include <arpa/inet.h>
@@ -33,7 +34,7 @@ int init_function(struct vmod_priv *priv, const struct VCL_conf *conf)
 
     cache = calloc(1, sizeof(cache_t));
 
-    AN(cache)
+    AN(cache);
 
     cache->sockfd = -1;
 
