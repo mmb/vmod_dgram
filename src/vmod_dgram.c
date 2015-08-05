@@ -44,10 +44,11 @@ int init_function(struct vmod_priv *priv, const struct VCL_conf *conf)
     return 0;
 }
 
-void vmod_send(struct sess *sp,  struct vmod_priv *priv, const char *s, const char *host, int port)
+VCL_VOID vmod_send(const struct vrt_ctx *ctx, struct vmod_priv *priv, VCL_STRING value, VCL_STRING host, VCL_INT port)
 {
-    cache_t *cache = priv->priv;
     struct sockaddr_in destaddr;
+
+    cache_t *cache = (cache_t*)priv->priv;
 
     if (cache->sockfd == -1) {
         cache->sockfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
@@ -59,7 +60,7 @@ void vmod_send(struct sess *sp,  struct vmod_priv *priv, const char *s, const ch
     destaddr.sin_addr.s_addr = inet_addr(host);
     destaddr.sin_port = htons(port);
 
-    sendto(cache->sockfd, s, strlen(s), 0, (struct sockaddr *) &destaddr, sizeof(destaddr));
+    sendto(cache->sockfd, value, strlen(value), 0, (struct sockaddr *) &destaddr, sizeof(destaddr));
 
     return;
 }
