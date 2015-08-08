@@ -3,12 +3,13 @@ vmod_dgram
 ============
 
 ----------------------
-Varnish Dgram Module
+Varnish 4.0 Dgram Module
 ----------------------
 
 :Author: Matthew M. Boedicker
-:Date: 2013-05-30
-:Version: 1.0
+:Author: Maksim Naumov
+:Date: 2015-08-05
+:Version: 0.2
 :Manual section: 3
 
 SYNOPSIS
@@ -50,26 +51,23 @@ Example
 INSTALLATION
 ============
 
-The source tree is based on autotools to configure the building, and
-does also have the necessary bits in place to do functional unit tests
-using the varnishtest tool.
+If you received this package without a pre-generated configure script, you must
+have the GNU Autotools installed, and can then run the 'autogen.sh' script. If
+you received this package with a configure script, skip to the second
+command-line under Usage to configure.
 
 Usage::
 
- ./configure VARNISHSRC=DIR [VMODDIR=DIR]
+ # Generate configure script
+ ./autogen.sh
 
-`VARNISHSRC` is the directory of the Varnish source tree for which to
-compile your vmod. Both the `VARNISHSRC` and `VARNISHSRC/include`
-will be added to the include search paths for your module.
-
-Optionally you can also set the vmod install directory by adding
-`VMODDIR=DIR` (defaults to the pkg-config discovered directory from your
-Varnish installation).
+ # Execute configure script
+ ./configure [PKG_CONFIG=PATH]
 
 Make targets:
 
 * make - builds the vmod
-* make install - installs your vmod in `VMODDIR`
+* make install - installs your vmod
 * make check - runs the unit tests in ``src/tests/*.vtc``
 
 HISTORY
@@ -79,3 +77,4 @@ COPYRIGHT
 =========
 
 * Copyright (c) 2013 Matthew M. Boedicker
+* Copyright (c) 2015 Maksim Naumov

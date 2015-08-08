@@ -6,7 +6,7 @@ Makefile.in
 *.lo
 *.la
 *~
-*.[1-9]
+*.3
 
 /aclocal.m4
 /autom4te.cache/
@@ -23,8 +23,11 @@ Makefile.in
 /libtool
 /ltmain.sh
 /missing
+/nbproject/
+/.idea/
 /stamp-h1
 /m4/
 
 /src/vcc_if.c
 /src/vcc_if.h
+/src/vmod_*rst
